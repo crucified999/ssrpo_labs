@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ -e lab.data ]
+then
+    rm lab.data
+    rm build/*.gcda
+fi
+
+echo "Start" > test/test-result.out
+
+for file in test/*.test
+do
+    echo "=== ${file} ===" >> test/test-result.out
+    cat ${file} >> test/test-result.out
+    echo "--- Test --->" >> test/test-result.out
+    bin/lab < ${file} >> test/test-result.out
+done
+
+exit 0

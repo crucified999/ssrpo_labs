@@ -1,0 +1,8 @@
+bin
+build
+doc/html
+*.data
+*.out
+*.user
+coverage
+lab.info
