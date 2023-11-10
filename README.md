@@ -35,13 +35,13 @@
 
 ## Адрес проекта
 
-Проект хранится в репозитории по адресу: [https://bmstu.codes/lsx/mstd/laboratory-works/lab2](https://bmstu.codes/lsx/mstd/laboratory-works/lab2).
+[Проект хранится в репозитории](https://bmstu.codes/lsx/mstd/laboratory-works/lab2).
 
 ## Документация 
 
-Диаграммы классов создаются автоматически при обновлении ветки `master` в удаленном репозитории GitLab и выкладываются в страницы проекта по адресу: [https://lsx.pages.bmstu.codes/mstd/laboratory-works/lab2/](https://lsx.pages.bmstu.codes/mstd/laboratory-works/lab2/).
+[Диаграммы классов создаются автоматически при обновлении ветки main в удаленном репозитории GitLab и выкладываются в "страницы" проекта](https://l2-msdt-samples-labs-8f90ab91cd0e259fd290c9217b5d79b809fc8de982.gitlab.bmstu.ru:8443/index.html).
 
-Отчёт о покрытии тестами создаётся автоматически при обновлении ветки `master` в удаленном репозитории GitLab и выкладываются в страницы проекта по адресу: [https://lsx.pages.bmstu.codes/mstd/laboratory-works/lab2/coverage](https://lsx.pages.bmstu.codes/mstd/laboratory-works/lab2/coverage).
+[Отчёт о покрытии тестами создаётся автоматически при обновлении ветки main в удаленном репозитории GitLab и выкладываются в "страницы" проекта](https://l2-msdt-samples-labs-8f90ab91cd0e259fd290c9217b5d79b809fc8de982.gitlab.bmstu.ru:8443/coverage).
 
 ## Модель
 
