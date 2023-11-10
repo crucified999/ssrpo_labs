@@ -35,7 +35,7 @@
 
 ## Адрес проекта
 
-[Проект хранится в репозитории](https://gitlab.bmstu.ru/msdt/samples/labs/l2).
+Проект хранится в репозитории по адресу: [https://gitlab.bmstu.ru/msdt/samples/labs/l2](https://gitlab.bmstu.ru/msdt/samples/labs/l2).
 
 ## Документация 
 
