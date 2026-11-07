@@ -1,0 +1,11 @@
+bin
+build
+doc/html
+*.data
+*.out
+*.user
+coverage
+lab.info
+
+# Это файл Finder'а на MacOS, он никогда не должен трекаться гитом
+.DS_Store
