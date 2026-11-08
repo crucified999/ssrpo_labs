@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="1230" viewBox="0 0 1480 1230" role="img" aria-label="Вариант 5 — последовательность команды update">
+<title>Вариант 5 — последовательность команды update</title>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M1,1 L9,5 L1,9" fill="none" stroke="#203147" stroke-width="1.4"/></marker>
+<marker id="triangle" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto"><path d="M1,1 L13,7 L1,13 Z" fill="white" stroke="#203147"/></marker>
+<marker id="diamond" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto"><path d="M1,5 L7,1 L13,5 L7,9 Z" fill="#203147"/></marker>
+<marker id="aggregate" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto"><path d="M1,5 L7,1 L13,5 L7,9 Z" fill="white" stroke="#203147"/></marker>
+</defs>
+<rect x="0" y="0" width="1480" height="1230" rx="0" fill="#ffffff" stroke="none"/>
+<text x="35" y="42" font-family="Arial, sans-serif" font-size="29" font-weight="bold" text-anchor="start" fill="#203147">Команда update · вариант № 5</text>
+<text x="35" y="74" font-family="monospace" font-size="17" font-weight="normal" text-anchor="start" fill="#203147">update 0 101 &quot;Сидоров Сидор Сидорович&quot; &quot;Ноутбук&quot; &quot;Москва, ул. Новая, 3&quot; 350.75</text>
+<rect x="35" y="100" width="300" height="940" rx="8" fill="#f1f6ff" stroke="none"/>
+<text x="185" y="130" font-family="Arial, sans-serif" font-size="19" font-weight="bold" text-anchor="middle" fill="#203147">1. Интерфейс</text>
+<rect x="50" y="155" width="270" height="65" rx="4" fill="white" stroke="#9dabbc"/>
+<text x="185" y="181" font-family="Arial, sans-serif" font-size="19" font-weight="bold" text-anchor="middle" fill="#203147">main</text>
+<text x="185" y="205" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#53657b">разбор строки</text>
+<polyline points="185,220 185,1005" fill="none" stroke="#203147" stroke-width="1.5" stroke-dasharray="7 5"/>
+<rect x="360" y="100" width="360" height="940" rx="8" fill="#f0f9f5" stroke="none"/>
+<text x="540" y="130" font-family="Arial, sans-serif" font-size="19" font-weight="bold" text-anchor="middle" fill="#203147">2. Операционный</text>
+<rect x="375" y="155" width="330" height="65" rx="4" fill="white" stroke="#9dabbc"/>
+<text x="540" y="181" font-family="Arial, sans-serif" font-size="19" font-weight="bold" text-anchor="middle" fill="#203147">app : Application</text>
+<text x="540" y="205" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#53657b">сценарий update</text>
+<polyline points="540,220 540,1005" fill="none" stroke="#203147" stroke-width="1.5" stroke-dasharray="7 5"/>
+<rect x="745" y="100" width="325" height="940" rx="8" fill="#fff8eb" stroke="none"/>
+<text x="907" y="130" font-family="Arial, sans-serif" font-size="19" font-weight="bold" text-anchor="middle" fill="#203147">3. Предметная область</text>
+<polyline points="907,470 907,1005" fill="none" stroke="#203147" stroke-width="1.5" stroke-dasharray="7 5"/>
+<rect x="1095" y="100" width="350" height="940" rx="8" fill="#f6f2fb" stroke="none"/>
+<text x="1270" y="130" font-family="Arial, sans-serif" font-size="19" font-weight="bold" text-anchor="middle" fill="#203147">4. Инфраструктура</text>
+<rect x="1110" y="155" width="320" height="65" rx="4" fill="white" stroke="#9dabbc"/>
+<text x="1270" y="181" font-family="Arial, sans-serif" font-size="19" font-weight="bold" text-anchor="middle" fill="#203147">_col : ItemCollector</text>
+<text x="1270" y="205" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#53657b">ACollector::updateItem</text>
+<polyline points="1270,220 1270,1005" fill="none" stroke="#203147" stroke-width="1.5" stroke-dasharray="7 5"/>
+<rect x="532" y="280" width="16" height="640" rx="0" fill="#c3e5d6" stroke="#597b6c"/>
+<rect x="899" y="470" width="16" height="105" rx="0" fill="#f5d7a0" stroke="#9a7b45"/>
+<rect x="1262" y="645" width="16" height="205" rx="0" fill="#d7c7e9" stroke="#82679c"/>
+<text x="185" y="254" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#53657b">аргументы выделены через std::quoted</text>
+<polyline points="185,280 532,280" fill="none" stroke="#203147" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="358.5" y="268" font-family="monospace" font-size="17" font-weight="normal" text-anchor="middle" fill="#203147">performCommand(args)</text>
+<text x="572" y="323" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">7 аргументов; parseIndex()</text>
+<polyline points="548,335 618,335 618,365 548,365" fill="none" stroke="#203147" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="572" y="393" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">createOrder(): стоимость → 35075 коп.</text>
+<polyline points="548,405 618,405 618,435 548,435" fill="none" stroke="#203147" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="770" y="440" width="275" height="60" rx="4" fill="white" stroke="#b39462"/>
+<text x="907" y="466" font-family="Arial, sans-serif" font-size="19" font-weight="bold" text-anchor="middle" fill="#203147">order : Order</text>
+<text x="907" y="489" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#53657b">новая карточка заказа</text>
+<polyline points="548,470 770,470" fill="none" stroke="#203147" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="659.0" y="458" font-family="monospace" font-size="17" font-weight="normal" text-anchor="middle" fill="#203147">«create» Order(...)</text>
+<text x="939" y="523" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">invariant()</text>
+<polyline points="915,535 985,535 985,565 915,565" fill="none" stroke="#203147" stroke-width="1.5" marker-end="url(#arrow)"/>
+<polyline points="899,595 548,595" fill="none" stroke="#203147" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="723.5" y="583" font-family="monospace" font-size="17" font-weight="normal" text-anchor="middle" fill="#203147">shared_ptr&lt;Order&gt;</text>
+<polyline points="548,645 1262,645" fill="none" stroke="#203147" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="905.0" y="633" font-family="monospace" font-size="17" font-weight="normal" text-anchor="middle" fill="#203147">updateItem(0, order)</text>
+<text x="1260" y="698" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="end" fill="#203147">индекс, удаление, nullptr</text>
+<polyline points="1278,710 1348,710 1348,740 1278,740" fill="none" stroke="#203147" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="1260" y="778" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="end" fill="#203147">_items[0] = order</text>
+<polyline points="1278,790 1348,790 1348,820 1278,820" fill="none" stroke="#203147" stroke-width="1.5" marker-end="url(#arrow)"/>
+<polyline points="1262,870 548,870" fill="none" stroke="#203147" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="905.0" y="858" font-family="monospace" font-size="17" font-weight="normal" text-anchor="middle" fill="#203147">void</text>
+<polyline points="532,920 185,920" fill="none" stroke="#203147" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="358.5" y="908" font-family="monospace" font-size="17" font-weight="normal" text-anchor="middle" fill="#203147">true</text>
+<text x="185" y="968" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#53657b">ожидание следующей строки</text>
+<rect x="35" y="1060" width="1410" height="140" rx="6" fill="#f7f9fc" stroke="#c6d0dd"/>
+<text x="55" y="1090" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#203147">Обработка ошибок и связь с архитектурой</text>
+<text x="55" y="1120" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="start" fill="#203147">Ошибочные данные отклоняются до замены; неверный или удалённый индекс вызывает out_of_range.</text>
+<text x="55" y="1148" font-family="Arial, sans-serif" font-size="18" font-weight="normal" text-anchor="start" fill="#203147">Application выводит ошибку через IOutput и возвращает false; main завершает программу с кодом 1.</text>
+<text x="55" y="1176" font-family="Arial, sans-serif" font-size="17" font-weight="normal" text-anchor="start" fill="#203147">На инфраструктурной дорожке показан унаследованный метод ACollector того же объекта _col типа ItemCollector.</text>
+</svg>

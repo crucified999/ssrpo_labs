@@ -1,66 +1,53 @@
-# Указываем образ для Docker
-image: ubuntu:20.04
+image: ubuntu:24.04
 
 stages:
   - compile
   - test
   - delivery
 
-# Задаём команды, которые будут выполнены до прогона скриптов
-before_script:
-  - apt-get -y update
-  - export DEBIAN_FRONTEND=noninteractive
-  - export TZ=Europe/Moscow
+variables:
+  DEBIAN_FRONTEND: noninteractive
+  TZ: Europe/Moscow
 
-# Собираем проект
+before_script:
+  - apt-get update
+  - apt-get install -y --no-install-recommends g++ make
+
 build-code:
   stage: compile
   script:
-  # Устанавливаем пакеты
-  - apt-get -y install gcc g++
-  - apt-get -y install make
-  # Собираем
-  - ./configure
-  - make
-  # Сохраняем в артефактах
+    - ./configure
+    - make -j2
   artifacts:
     paths:
-    - bin/lab
-    expire_in: 30 minutes
+      - bin/lab
+    expire_in: 1 week
 
-# Автотесты
 test-all:
   stage: test
   script:
-  - chmod +x test/test*
-  - test/make-result
-  - diff test/test-result.sample test/test-result.out
+    - make coverage
+  coverage: '/TOTAL line coverage: \d+\.\d+%/'
+  artifacts:
+    when: always
+    paths:
+      - coverage/
+    expire_in: 1 week
 
-# Используем GitLab Pages для публикации Doxygen-документации
 pages:
   stage: delivery
   script:
-  # Устанавливаем пакеты
-  - apt-get -y install gcc g++ make doxygen graphviz lcov
-  # Прогоняем Doxygen
-  - doxygen doc/Doxyfile.cfg
-  # Прогоняем сборку
-  - ./configure
-  - make
-  # Прогоняем тесты
-  - test/make-result
-  # Строим отчёт покрытия
-  - lcov -t "lab" -o lab.info -c -d . --no-external
-  - genhtml -o coverage lab.info
-  # Диплоим
-  - mv doc/html/ public/
-  - mv coverage/ public/coverage/
-
-  coverage: /^\s*lines\.*:\s+\d+\.\d+%/
-
+    - apt-get install -y --no-install-recommends doxygen graphviz lcov
+    - make coverage
+    - doxygen doc/Doxyfile.cfg
+    - lcov --capture --directory build --output-file coverage/lab.info --rc branch_coverage=0 --ignore-errors mismatch
+    - lcov --extract coverage/lab.info "$CI_PROJECT_DIR/src/*" "$CI_PROJECT_DIR/include/*" --output-file coverage/project.info
+    - genhtml coverage/project.info --output-directory coverage/html
+    - mkdir -p public
+    - cp -R doc/html/. public/
+    - cp -R coverage/html public/coverage
   artifacts:
     paths:
-    - public
-
-  only:
-  - main
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

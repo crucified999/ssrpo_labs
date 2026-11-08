@@ -1,56 +1,83 @@
-/* Программа-заготовка для домашнего задания
-*/
+#include <algorithm>
+#include <stdexcept>
 
 #include "hw/l3_DomainLayer.h"
 
 using namespace std;
 
-
-bool Person::invariant() const
+namespace
 {
-    return _year_of_birth >= MIN_YEAR_OF_BIRTH
-        && _year_of_birth <= MAX_YEAR_OF_BIRTH
-        && !_first_name.empty() && _first_name.size() <= MAX_NAME_LENGTH
-        && !_last_name.empty() && _last_name.size() <= MAX_NAME_LENGTH;
+    bool isValidText(const string & text, size_t max_length)
+    {
+        return !text.empty() && text.size() <= max_length
+            && text.find_first_not_of(' ') != string::npos
+            && none_of(text.begin(), text.end(), [](unsigned char ch)
+                { return ch < ' ' || ch == 127; });
+    }
 }
 
-Person::Person(const std::string & first_name, const std::string & last_name, uint16_t year_of_birth)
-    : _first_name(first_name), _last_name(last_name), _year_of_birth(year_of_birth)
+bool Order::invariant() const
 {
-    assert(invariant());
+    return _order_number >= MIN_ORDER_NUMBER
+        && isValidText(_courier_name, MAX_COURIER_NAME_LENGTH)
+        && isValidText(_product_name, MAX_PRODUCT_NAME_LENGTH)
+        && isValidText(_delivery_address, MAX_DELIVERY_ADDRESS_LENGTH)
+        && _delivery_cost_kopecks <= MAX_DELIVERY_COST_KOPECKS;
 }
 
-const string & Person::getFirstName() const
+Order::Order(uint32_t order_number, const string & courier_name,
+             const string & product_name, const string & delivery_address,
+             uint64_t delivery_cost_kopecks)
+    : _order_number(order_number), _courier_name(courier_name),
+      _product_name(product_name), _delivery_address(delivery_address),
+      _delivery_cost_kopecks(delivery_cost_kopecks)
 {
-    return _first_name;
+    if (!invariant())
+        throw invalid_argument("некорректные данные заказа: проверьте номер, текстовые поля и стоимость");
 }
 
-const string & Person::getLastName() const
+uint32_t Order::getOrderNumber() const
 {
-    return _last_name;
+    return _order_number;
 }
 
-uint16_t Person::getYearOfBirth() const
+const string & Order::getCourierName() const
 {
-    return _year_of_birth;
+    return _courier_name;
 }
 
-bool   Person::write(ostream& os)
+const string & Order::getProductName() const
 {
-    writeString(os, _first_name);
-    writeString(os, _last_name);
-    writeNumber(os, _year_of_birth);
+    return _product_name;
+}
 
+const string & Order::getDeliveryAddress() const
+{
+    return _delivery_address;
+}
+
+uint64_t Order::getDeliveryCostKopecks() const
+{
+    return _delivery_cost_kopecks;
+}
+
+bool Order::write(ostream & os)
+{
+    writeNumber(os, _order_number);
+    writeString(os, _courier_name);
+    writeString(os, _product_name);
+    writeString(os, _delivery_address);
+    writeNumber(os, _delivery_cost_kopecks);
     return os.good();
 }
 
-
-
-shared_ptr<ICollectable> ItemCollector::read(istream& is)
+shared_ptr<ICollectable> ItemCollector::read(istream & is)
 {
-    string   first_name = readString(is, MAX_NAME_LENGTH);
-    string   last_name  = readString(is, MAX_NAME_LENGTH);
-    uint16_t year       = readNumber<uint16_t>(is);
-
-    return std::make_shared<Person>(first_name, last_name, year);
+    uint32_t order_number = readNumber<uint32_t>(is);
+    string courier_name = readString(is, MAX_COURIER_NAME_LENGTH);
+    string product_name = readString(is, MAX_PRODUCT_NAME_LENGTH);
+    string delivery_address = readString(is, MAX_DELIVERY_ADDRESS_LENGTH);
+    uint64_t delivery_cost_kopecks = readNumber<uint64_t>(is);
+    return make_shared<Order>(order_number, courier_name, product_name,
+                              delivery_address, delivery_cost_kopecks);
 }

@@ -13,6 +13,7 @@ Copyright (c) 2019 МГТУ им. Н.Э. Баумана, кафедра ИУ-6, 
 
 #include "hw/l3_DomainLayer.h"
 
+/** Обратный вызов для вывода результата без зависимости от консоли. */
 class IOutput
 {
 public:
@@ -21,6 +22,7 @@ public:
     virtual void Output(std::string s) const = 0;
 };
 
+/** Сценарии работы с карточками заказов; состояние хранится в коллекции. */
 class Application
 {
 public:

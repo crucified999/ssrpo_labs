@@ -1,10 +1,16 @@
-#!/bin/bash
-#
-# Скрипт создания документации 
-#
-# Запуск должен осуществляться из проектной папки
-#
+#!/usr/bin/env bash
+# Генерация HTML-документации; повторный запуск обновляет тот же каталог.
+set -euo pipefail
 
-rm -rf doc/html
+project_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+cd "$project_dir"
+
+for tool in doxygen dot; do
+    if ! command -v "$tool" >/dev/null 2>&1; then
+        printf 'Для генерации документации требуется %s.\n' "$tool" >&2
+        exit 1
+    fi
+done
+
 doxygen doc/Doxyfile.cfg
-
+printf 'Документация создана: %s/doc/html/index.html\n' "$project_dir"

@@ -1,0 +1,44 @@
+sequenceDiagram
+    autonumber
+    actor User as Пользователь
+    box rgb(229,240,255) 1. Пользовательский интерфейс
+        participant UI as main
+        participant Out as out : TerminalOutput
+    end
+    box rgb(227,245,237) 2. Операционный уровень
+        participant App as app : Application
+    end
+    box rgb(255,242,218) 3. Предметная область
+        participant Order as order : Order
+    end
+    box rgb(239,233,250) 4. Инфраструктура
+        participant Col as _col : ItemCollector<br/>ACollector::updateItem
+    end
+    User->>UI: update 0 101 "Сидоров Сидор Сидорович" "Ноутбук" "Москва, ул. Новая, 3" 350.75
+    UI->>App: performCommand(args)
+    activate App
+    App->>App: проверить 7 аргументов; parseIndex(args[1])
+    App->>App: createOrder(args, 2): номер, строки, стоимость → 35075 коп.
+    App->>Order: make_shared<Order>(101, courier, product, address, 35075)
+    activate Order
+    Order->>Order: invariant()
+    Order-->>App: shared_ptr<Order>
+    deactivate Order
+    App->>Col: updateItem(0, order)
+    activate Col
+    Col->>Col: проверить индекс, признак удаления и указатель
+    alt активная позиция и непустой order
+        Col->>Col: _items[0] = order
+        Col-->>App: void
+        App-->>UI: true
+    else позиция отсутствует или удалена
+        Col-->>App: throw out_of_range
+        App->>Out: IOutput::Output("Ошибка: ...")
+        Out-->>User: диагностическое сообщение
+        App-->>UI: false
+        UI-->>User: завершение с кодом 1
+    end
+    deactivate Col
+    deactivate App
+    Note over Col: Инфраструктурная дорожка показывает унаследованный метод<br/>ACollector::updateItem() того же объекта _col.
+    Note over App,Order: Ошибка новых данных возникает до вызова updateItem().<br/>Исходная карточка сохраняется при ошибке.

@@ -1,4 +1,7 @@
-#!/bin/bash
-
+#!/bin/sh
+set -eu
+project_dir="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+cd "$project_dir"
+make test
 test/make-result
-diff test/test-result.sample test/test-result.out
+diff -u test/test-result.sample test/test-result.out

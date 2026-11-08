@@ -1,0 +1,68 @@
+classDiagram
+    direction TB
+    namespace L1_UserInterface {
+        class TerminalOutput {
+            +Output(string) void
+        }
+    }
+    namespace L2_ApplicationLayer {
+        class IOutput {
+            <<interface>>
+            +Output(string) void*
+        }
+        class Application {
+            -IOutput& _out
+            -ItemCollector _col
+            +performCommand(vector~string~) bool
+        }
+    }
+    namespace L3_DomainLayer {
+        class Order {
+            -uint32_t _order_number
+            -string _courier_name
+            -string _product_name
+            -string _delivery_address
+            -uint64_t _delivery_cost_kopecks
+            #invariant() bool
+            +Order(number, courier, product, address, cost)
+            +getOrderNumber() uint32_t
+            +getCourierName() string
+            +getProductName() string
+            +getDeliveryAddress() string
+            +getDeliveryCostKopecks() uint64_t
+            +write(ostream&) bool
+        }
+        class ItemCollector {
+            +read(istream&) shared_ptr~ICollectable~
+        }
+    }
+    namespace L4_InfrastructureLayer {
+        class ICollectable {
+            <<interface>>
+            +write(ostream&) bool*
+        }
+        class ACollector {
+            <<abstract>>
+            -vector _items
+            -vector~bool~ _removed_signs
+            -size_t _removed_count
+            +getSize() size_t
+            +getItem(size_t) shared_ptr~ICollectable~
+            +isRemoved(size_t) bool
+            +addItem(shared_ptr~ICollectable~) void
+            +removeItem(size_t) void
+            +updateItem(size_t, shared_ptr~ICollectable~) void
+            +clean() void
+            +loadCollection(string) bool
+            +saveCollection(string) bool
+            +read(istream&) shared_ptr~ICollectable~*
+        }
+    }
+    IOutput <|.. TerminalOutput
+    Application --> IOutput : вывод
+    Application *-- ItemCollector : коллекция
+    Application ..> Order : создаёт
+    ACollector <|-- ItemCollector
+    ICollectable <|.. Order
+    ACollector o-- ICollectable : записи
+    ItemCollector ..> Order : восстанавливает

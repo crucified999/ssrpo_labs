@@ -1,33 +1,68 @@
-TARGET = bin/lab
-COMPILE = g++ -std=c++17 -c -Iinclude -O0 --coverage
-LINK = g++ --coverage
-SRC = src/
-BUILD = build/
+CXX ?= g++
+CPPFLAGS += -Iinclude
+CXXFLAGS ?= -std=c++17 -Wall -Wextra -Wpedantic -O0 -g
+COVERAGE_FLAGS ?= --coverage
+LDFLAGS += $(COVERAGE_FLAGS)
+PREFIX ?= /usr/local
 
-.PHONY: all clean install uninstall
+TARGET := bin/lab
+UNIT_TARGET := bin/unit_tests
+INTEGRATION_TARGET := bin/integration_tests
+COVERAGE_TARGET := bin/check_coverage
+SOURCES := $(wildcard src/*.cpp)
+OBJECTS := $(patsubst src/%.cpp,build/%.o,$(SOURCES))
+LIB_OBJECTS := $(filter-out build/l1_UserInterface.o,$(OBJECTS))
+DEPENDENCIES := $(OBJECTS:.o=.d) build/unit_tests.d build/integration_tests.d build/check_coverage.d
+
+.PHONY: all clean test coverage install uninstall
 
 all: $(TARGET)
 
+$(TARGET): $(OBJECTS) | bin
+	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(UNIT_TARGET): build/unit_tests.o $(LIB_OBJECTS) | bin
+	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(INTEGRATION_TARGET): build/integration_tests.o | bin
+	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(COVERAGE_TARGET): build/check_coverage.o | bin
+	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+build/%.o: src/%.cpp | build
+	rm -f $(@:.o=.gcda)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(COVERAGE_FLAGS) -MMD -MP -c $(abspath $<) -o $@
+
+build/unit_tests.o: test/unit.cpp | build
+	rm -f $(@:.o=.gcda)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(COVERAGE_FLAGS) -MMD -MP -c $(abspath $<) -o $@
+
+build/integration_tests.o: test/integration.cpp test/support.h | build
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -MMD -MP -c $(abspath $<) -o $@
+
+build/check_coverage.o: test/check_coverage.cpp test/support.h | build
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -MMD -MP -c $(abspath $<) -o $@
+
+bin build:
+	mkdir -p $@
+
+test: $(TARGET) $(UNIT_TARGET) $(INTEGRATION_TARGET)
+	$(INTEGRATION_TARGET) $(TARGET) $(UNIT_TARGET)
+
+coverage: $(TARGET) $(UNIT_TARGET) $(INTEGRATION_TARGET) $(COVERAGE_TARGET)
+	$(COVERAGE_TARGET) --reset
+	$(MAKE) test
+	$(COVERAGE_TARGET) --minimum 95
+
 clean:
-	rm -rf $(TARGET) $(BUILD)*.o
+	rm -rf bin build coverage
 
-$(TARGET): $(BUILD)l1_UserInterface.o $(BUILD)l2_ApplicationLayer.o $(BUILD)l3_DomainLayer.o $(BUILD)l4_InfrastructureLayer.o
-	$(LINK) -o $(TARGET) $(BUILD)l1_UserInterface.o $(BUILD)l2_ApplicationLayer.o $(BUILD)l3_DomainLayer.o $(BUILD)l4_InfrastructureLayer.o
-
-$(BUILD)l1_UserInterface.o: src/l1_UserInterface.cpp include/hw/l2_ApplicationLayer.h include/hw/l3_DomainLayer.h include/hw/l4_InfrastructureLayer.h
-	$(COMPILE) $(SRC)l1_UserInterface.cpp -o $(BUILD)l1_UserInterface.o
-
-$(BUILD)l2_ApplicationLayer.o: src/l2_ApplicationLayer.cpp include/hw/l2_ApplicationLayer.h include/hw/l3_DomainLayer.h include/hw/l4_InfrastructureLayer.h
-	$(COMPILE) $(SRC)l2_ApplicationLayer.cpp -o $(BUILD)l2_ApplicationLayer.o
-
-$(BUILD)l3_DomainLayer.o: src/l3_DomainLayer.cpp include/hw/l3_DomainLayer.h include/hw/l4_InfrastructureLayer.h
-	$(COMPILE) $(SRC)l3_DomainLayer.cpp -o $(BUILD)l3_DomainLayer.o
-
-$(BUILD)l4_InfrastructureLayer.o: src/l4_InfrastructureLayer.cpp include/hw/l4_InfrastructureLayer.h
-	$(COMPILE) $(SRC)l4_InfrastructureLayer.cpp -o $(BUILD)l4_InfrastructureLayer.o
-
-install:
-	install $(TARGET) /usr/local/bin
+install: $(TARGET)
+	install -d $(DESTDIR)$(PREFIX)/bin
+	install -m 755 $(TARGET) $(DESTDIR)$(PREFIX)/bin/lab
 
 uninstall:
-	rm -rf /usr/local/bin/hw
+	rm -f $(DESTDIR)$(PREFIX)/bin/lab
+
+-include $(DEPENDENCIES)

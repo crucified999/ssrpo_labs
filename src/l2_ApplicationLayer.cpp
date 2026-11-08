@@ -1,119 +1,159 @@
-/* Программа-заготовка для домашнего задания
-*/
+#include <charconv>
+#include <limits>
+#include <stdexcept>
 
 #include "hw/l2_ApplicationLayer.h"
 
 using namespace std;
 
-inline const string DATA_DEFAULT_NAME = "lab.data";
+namespace
+{
+    const string DATA_DEFAULT_NAME = "lab.data";
+
+    uint64_t parseUnsigned(const string & text, uint64_t minimum, uint64_t maximum)
+    {
+        uint64_t value = 0;
+        auto result = from_chars(text.data(), text.data() + text.size(), value);
+        if (result.ec != errc() || result.ptr != text.data() + text.size()
+            || value < minimum || value > maximum)
+            throw invalid_argument("недопустимое числовое значение '" + text + "'");
+        return value;
+    }
+
+    size_t parseIndex(const string & text)
+    {
+        return static_cast<size_t>(parseUnsigned(text, 0, numeric_limits<size_t>::max()));
+    }
+
+    uint64_t parseDeliveryCost(const string & text)
+    {
+        size_t point = text.find('.');
+        string rubles = text.substr(0, point);
+        uint64_t value = parseUnsigned(rubles, 0, MAX_DELIVERY_COST_KOPECKS / 100) * 100;
+        if (point != string::npos)
+        {
+            string kopecks = text.substr(point + 1);
+            if (kopecks.empty() || kopecks.size() > 2)
+                throw invalid_argument("стоимость задаётся в рублях, не более двух цифр после точки");
+            value += parseUnsigned(kopecks, 0, 99) * (kopecks.size() == 1 ? 10 : 1);
+        }
+        return value;
+    }
+
+    string formatDeliveryCost(uint64_t kopecks)
+    {
+        return to_string(kopecks / 100) + "." + (kopecks % 100 < 10 ? "0" : "")
+            + to_string(kopecks % 100);
+    }
+
+    shared_ptr<Order> createOrder(const vector<string> & args, size_t offset)
+    {
+        uint32_t order_number = static_cast<uint32_t>(
+            parseUnsigned(args[offset], MIN_ORDER_NUMBER, MAX_ORDER_NUMBER));
+        uint64_t delivery_cost = parseDeliveryCost(args[offset + 4]);
+        return make_shared<Order>(order_number, args[offset + 1], args[offset + 2],
+                                  args[offset + 3], delivery_cost);
+    }
+}
 
 bool Application::performCommand(const vector<string> & args)
 {
     if (args.empty())
         return false;
 
-    if (args[0] == "l" || args[0] == "load")
+    try
     {
-        string filename = (args.size() == 1) ? DATA_DEFAULT_NAME : args[1];
-
-        if (!_col.loadCollection(filename))
+        const string & command = args[0];
+        if (command == "l" || command == "load" || command == "s" || command == "save")
         {
-            _out.Output("Ошибка при загрузке файла '" + filename + "'");
-            return false;
+            if (args.size() > 2)
+                throw invalid_argument("команда load/save принимает не более одного имени файла");
+            string file_name = args.size() == 1 ? DATA_DEFAULT_NAME : args[1];
+            bool is_load = command == "l" || command == "load";
+            bool is_success = is_load ? _col.loadCollection(file_name) : _col.saveCollection(file_name);
+            if (!is_success)
+                _out.Output(string("Ошибка при ") + (is_load ? "загрузке" : "сохранении")
+                    + " файла '" + file_name + "'");
+            return is_success;
         }
 
-        return true;
-    }
-
-    if (args[0] == "s" || args[0] == "save")
-    {
-        string filename = (args.size() == 1) ? DATA_DEFAULT_NAME : args[1];
-
-        if (!_col.saveCollection(filename))
+        if (command == "c" || command == "clean")
         {
-            _out.Output("Ошибка при сохранении файла '" + filename + "'");
-            return false;
+            if (args.size() != 1)
+                throw invalid_argument("команда clean не принимает аргументов");
+            _col.clean();
+            return true;
         }
 
-        return true;
-    }
-
-    if (args[0] == "c" || args[0] == "clean")
-    {
-        if (args.size() != 1)
+        if (command == "a" || command == "add")
         {
-            _out.Output("Некорректное количество аргументов команды clean");
-            return false;
+            if (args.size() != 6)
+                throw invalid_argument("формат: add NUMBER COURIER PRODUCT ADDRESS COST");
+            _col.addItem(createOrder(args, 1));
+            return true;
         }
 
-        _col.clean();
-
-        return true;
-    }
-
-    if (args[0] == "a" || args[0] == "add")
-    {
-        if (args.size() != 4)
+        if (command == "r" || command == "remove")
         {
-            _out.Output("Некорректное количество аргументов команды add");
-            return false;
+            if (args.size() != 2)
+                throw invalid_argument("формат: remove INDEX");
+            _col.removeItem(parseIndex(args[1]));
+            return true;
         }
 
-        _col.addItem(make_shared<Person>(args[1].c_str(), args[2].c_str(), stoul(args[3])));
-        return true;
-    }
-
-    if (args[0] == "r" || args[0] == "remove")
-    {
-        if (args.size() != 2)
+        if (command == "u" || command == "update")
         {
-            _out.Output("Некорректное количество аргументов команды remove");
-            return false;
+            if (args.size() != 7)
+                throw invalid_argument("формат: update INDEX NUMBER COURIER PRODUCT ADDRESS COST");
+            size_t index = parseIndex(args[1]);
+            auto order = createOrder(args, 2);
+            _col.updateItem(index, order);
+            return true;
         }
 
-        _col.removeItem(stoul(args[1]));
-        return true;
-    }
-
-    if (args[0] == "u" || args[0] == "update")
-    {
-        if (args.size() != 5)
+        if (command == "v" || command == "view")
         {
-            _out.Output("Некорректное количество аргументов команды update");
-            return false;
-        }
-
-        _col.updateItem(stoul(args[1]), make_shared<Person>(args[2].c_str(), args[3].c_str(), stoul(args[4])));
-        return true;
-    }
-
-    if (args[0] == "v" || args[0] == "view")
-    {
-        if (args.size() != 1)
-        {
-            _out.Output("Некорректное количество аргументов команды view");
-            return false;
-        }
-
-        size_t count = 0;
-        for(size_t i=0; i < _col.getSize(); ++i)
-        {
-            const Person & item = static_cast<Person &>(*_col.getItem(i));
-
-            if (!_col.isRemoved(i))
+            if (args.size() != 1)
+                throw invalid_argument("команда view не принимает аргументов");
+            size_t count = 0;
+            for (size_t i = 0; i < _col.getSize(); ++i)
             {
-                _out.Output("[" + to_string(i) + "] "
-                        + item.getFirstName() + " "
-                        + item.getLastName() + " "
-                        + to_string(item.getYearOfBirth()));
-                count ++;
+                if (_col.isRemoved(i))
+                    continue;
+                const Order & item = static_cast<const Order &>(*_col.getItem(i));
+                _out.Output("[" + to_string(i) + "] Заказ № " + to_string(item.getOrderNumber())
+                    + " | курьер: " + item.getCourierName()
+                    + " | товар: " + item.getProductName()
+                    + " | адрес: " + item.getDeliveryAddress()
+                    + " | доставка: " + formatDeliveryCost(item.getDeliveryCostKopecks()) + " руб.");
+                ++count;
             }
+            _out.Output("Количество элементов в коллекции: " + to_string(count));
+            return true;
         }
 
-        _out.Output("Количество элементов в коллекции: " + to_string(count));
-        return true;
-    }
+        if (command == "h" || command == "help")
+        {
+            if (args.size() != 1)
+                throw invalid_argument("команда help не принимает аргументов");
+            _out.Output("Курьерская служба. Команды:\n"
+                "  add NUMBER COURIER PRODUCT ADDRESS COST (a)\n"
+                "  update INDEX NUMBER COURIER PRODUCT ADDRESS COST (u)\n"
+                "  remove INDEX (r), view (v), clean (c)\n"
+                "  load [FILE] (l), save [FILE] (s), help (h)\n"
+                "Текст с пробелами заключайте в двойные кавычки.\n"
+                "Номер заказа: 1..4294967295. Стоимость доставки: 0..99999999.99 руб.\n"
+                "Стоимость задаётся с точкой, не более двух знаков после неё. Индексы с 0.\n"
+                "Пустая строка или конец ввода завершает работу; сохранение выполняется командой save.");
+            return true;
+        }
 
-    _out.Output("Недопустимая команда '" + args[0] + "'");
-    return false;
+        _out.Output("Недопустимая команда '" + command + "'");
+        return false;
+    }
+    catch (const exception & error)
+    {
+        _out.Output(string("Ошибка: ") + error.what());
+        return false;
+    }
 }

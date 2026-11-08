@@ -1,11 +1,15 @@
-bin
-build
-doc/html
+/bin/
+/build/
+/coverage/
+/public/
+/doc/html/
+/doc/latex/
 *.data
 *.out
 *.user
-coverage
-lab.info
-
-# Это файл Finder'а на MacOS, он никогда не должен трекаться гитом
+*.gcda
+*.gcno
+*.gcov
+*.info
+__pycache__/
 .DS_Store

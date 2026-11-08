@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="1550" viewBox="0 0 1480 1550" role="img" aria-label="Курьерская служба — UML-диаграмма классов">
+<title>Курьерская служба — UML-диаграмма классов</title>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M1,1 L9,5 L1,9" fill="none" stroke="#203147" stroke-width="1.4"/></marker>
+<marker id="triangle" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto"><path d="M1,1 L13,7 L1,13 Z" fill="white" stroke="#203147"/></marker>
+<marker id="diamond" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto"><path d="M1,5 L7,1 L13,5 L7,9 Z" fill="#203147"/></marker>
+<marker id="aggregate" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto"><path d="M1,5 L7,1 L13,5 L7,9 Z" fill="white" stroke="#203147"/></marker>
+</defs>
+<rect x="0" y="0" width="1480" height="1550" rx="0" fill="#ffffff" stroke="none"/>
+<text x="40" y="42" font-family="Arial, sans-serif" font-size="29" font-weight="bold" text-anchor="start" fill="#203147">Курьерская служба · диаграмма классов</text>
+<rect x="25" y="75" width="1430" height="155" rx="8" fill="#f1f6ff" stroke="#d8e0e9"/>
+<text x="45" y="105" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#203147">1. Пользовательский интерфейс · l1_UserInterface.cpp</text>
+<rect x="25" y="255" width="1430" height="240" rx="8" fill="#f0f9f5" stroke="#d8e0e9"/>
+<text x="45" y="285" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#203147">2. Операционный уровень · l2_ApplicationLayer</text>
+<rect x="25" y="520" width="1430" height="485" rx="8" fill="#fff8eb" stroke="#d8e0e9"/>
+<text x="45" y="550" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#203147">3. Предметная область · l3_DomainLayer</text>
+<rect x="25" y="1030" width="1430" height="420" rx="8" fill="#f6f2fb" stroke="#d8e0e9"/>
+<text x="45" y="1060" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#203147">4. Инфраструктура · l4_InfrastructureLayer</text>
+<rect x="100" y="130" width="350" height="78" rx="0" fill="white" stroke="#bac6d4"/>
+<text x="275.0" y="158" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#203147">TerminalOutput</text>
+<polyline points="100,170 450,170" fill="none" stroke="#203147" stroke-width="1.5"/>
+<text x="114" y="195" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ Output(string): void</text>
+<rect x="900" y="130" width="470" height="78" rx="0" fill="white" stroke="#bac6d4"/>
+<text x="1135.0" y="158" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#203147">main()</text>
+<polyline points="900,170 1370,170" fill="none" stroke="#203147" stroke-width="1.5"/>
+<text x="914" y="195" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">getline → std::quoted → performCommand</text>
+<rect x="100" y="315" width="350" height="98" rx="0" fill="white" stroke="#bac6d4"/>
+<text x="275.0" y="337" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#53657b">«interface»</text>
+<text x="275.0" y="363" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#203147">IOutput</text>
+<polyline points="100,375 450,375" fill="none" stroke="#203147" stroke-width="1.5"/>
+<text x="114" y="400" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ Output(string): void = 0</text>
+<rect x="900" y="315" width="470" height="138" rx="0" fill="white" stroke="#bac6d4"/>
+<text x="1135.0" y="343" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#203147">Application</text>
+<polyline points="900,355 1370,355" fill="none" stroke="#203147" stroke-width="1.5"/>
+<text x="914" y="380" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">- _out: const IOutput&amp;</text>
+<text x="914" y="403" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">- _col: ItemCollector</text>
+<polyline points="900,417 1370,417" fill="none" stroke="#203147" stroke-width="1.5"/>
+<text x="914" y="440" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ performCommand(args): bool</text>
+<rect x="100" y="595" width="620" height="368" rx="0" fill="white" stroke="#bac6d4"/>
+<text x="410.0" y="623" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#203147">Order</text>
+<polyline points="100,635 720,635" fill="none" stroke="#203147" stroke-width="1.5"/>
+<text x="114" y="660" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">- _order_number: uint32_t</text>
+<text x="114" y="683" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">- _courier_name: string</text>
+<text x="114" y="706" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">- _product_name: string</text>
+<text x="114" y="729" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">- _delivery_address: string</text>
+<text x="114" y="752" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">- _delivery_cost_kopecks: uint64_t</text>
+<polyline points="100,766 720,766" fill="none" stroke="#203147" stroke-width="1.5"/>
+<text x="114" y="789" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ Order(number, courier, product, address, cost)</text>
+<text x="114" y="812" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147"># invariant(): bool</text>
+<text x="114" y="835" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ getOrderNumber(): uint32_t</text>
+<text x="114" y="858" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ getCourierName(): const string&amp;</text>
+<text x="114" y="881" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ getProductName(): const string&amp;</text>
+<text x="114" y="904" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ getDeliveryAddress(): const string&amp;</text>
+<text x="114" y="927" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ getDeliveryCostKopecks(): uint64_t</text>
+<text x="114" y="950" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ write(ostream&amp;): bool</text>
+<rect x="900" y="595" width="470" height="78" rx="0" fill="white" stroke="#bac6d4"/>
+<text x="1135.0" y="623" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#203147">ItemCollector</text>
+<polyline points="900,635 1370,635" fill="none" stroke="#203147" stroke-width="1.5"/>
+<text x="914" y="660" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ read(istream&amp;): shared_ptr&lt;ICollectable&gt;</text>
+<rect x="100" y="1110" width="620" height="98" rx="0" fill="white" stroke="#bac6d4"/>
+<text x="410.0" y="1132" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#53657b">«interface»</text>
+<text x="410.0" y="1158" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#203147">ICollectable</text>
+<polyline points="100,1170 720,1170" fill="none" stroke="#203147" stroke-width="1.5"/>
+<text x="114" y="1195" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ write(ostream&amp;): bool = 0</text>
+<rect x="900" y="1110" width="470" height="319" rx="0" fill="white" stroke="#bac6d4"/>
+<text x="1135.0" y="1132" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#53657b">«abstract»</text>
+<text x="1135.0" y="1158" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#203147">ACollector</text>
+<polyline points="900,1170 1370,1170" fill="none" stroke="#203147" stroke-width="1.5"/>
+<text x="914" y="1195" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">- _items: vector&lt;shared_ptr&lt;ICollectable&gt;&gt;</text>
+<text x="914" y="1218" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">- _removed_signs: vector&lt;bool&gt;</text>
+<text x="914" y="1241" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">- _removed_count: size_t</text>
+<polyline points="900,1255 1370,1255" fill="none" stroke="#203147" stroke-width="1.5"/>
+<text x="914" y="1278" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ read(istream&amp;): shared_ptr&lt;ICollectable&gt; = 0</text>
+<text x="914" y="1301" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ getSize(), getItem(), isRemoved()</text>
+<text x="914" y="1324" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ addItem(item), removeItem(index)</text>
+<text x="914" y="1347" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ updateItem(index, item)</text>
+<text x="914" y="1370" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ clean()</text>
+<text x="914" y="1393" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ loadCollection(file): bool</text>
+<text x="914" y="1416" font-family="monospace" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">+ saveCollection(file): bool</text>
+<polyline points="275,208 275,315" fill="none" stroke="#203147" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#triangle)"/>
+<polyline points="1135,208 1135,315" fill="none" stroke="#203147" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<polyline points="900,370 450,370" fill="none" stroke="#203147" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="665" y="354" font-family="Arial, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#203147">вывод через интерфейс</text>
+<polyline points="1135,453 1135,595" fill="none" stroke="#203147" stroke-width="1.5" marker-start="url(#diamond)"/>
+<text x="1150" y="560" font-family="Arial, sans-serif" font-size="17" font-weight="normal" text-anchor="start" fill="#203147">владеет</text>
+<polyline points="900,410 795,410 795,740 720,740" fill="none" stroke="#203147" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="810" y="710" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="start" fill="#203147">создаёт</text>
+<polyline points="1135,673 1135,1110" fill="none" stroke="#203147" stroke-width="1.5" marker-end="url(#triangle)"/>
+<text x="1150" y="960" font-family="Arial, sans-serif" font-size="17" font-weight="normal" text-anchor="start" fill="#203147">наследует</text>
+<polyline points="410,963 410,1110" fill="none" stroke="#203147" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#triangle)"/>
+<polyline points="900,640 845,640 845,1020 580,1020 580,963" fill="none" stroke="#203147" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="820" y="990" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="end" fill="#203147">восстанавливает</text>
+<polyline points="900,1180 720,1180" fill="none" stroke="#203147" stroke-width="1.5" marker-start="url(#aggregate)"/>
+<text x="810" y="1165" font-family="Arial, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#203147">записи</text>
+<rect x="40" y="84" width="700" height="28" rx="0" fill="#f1f6ff" stroke="none"/>
+<text x="45" y="105" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#203147">1. Пользовательский интерфейс · l1_UserInterface.cpp</text>
+<rect x="40" y="264" width="700" height="28" rx="0" fill="#f0f9f5" stroke="none"/>
+<text x="45" y="285" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#203147">2. Операционный уровень · l2_ApplicationLayer</text>
+<rect x="40" y="529" width="700" height="28" rx="0" fill="#fff8eb" stroke="none"/>
+<text x="45" y="550" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#203147">3. Предметная область · l3_DomainLayer</text>
+<rect x="40" y="1039" width="700" height="28" rx="0" fill="#f6f2fb" stroke="none"/>
+<text x="45" y="1060" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="start" fill="#203147">4. Инфраструктура · l4_InfrastructureLayer</text>
+<text x="40" y="1491" font-family="Arial, sans-serif" font-size="17" font-weight="normal" text-anchor="start" fill="#203147">Сплошная линия с треугольником — наследование; пунктир с треугольником — реализация интерфейса.</text>
+<text x="40" y="1520" font-family="Arial, sans-serif" font-size="17" font-weight="normal" text-anchor="start" fill="#203147">Ромб — владение / агрегация; стрелка — использование. Детали стандартной библиотеки сокращены.</text>
+</svg>

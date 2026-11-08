@@ -1,52 +1,54 @@
-/* Программа-заготовка для домашнего задания
-*/
-
+#include <cctype>
+#include <iomanip>
 #include <iostream>
-#include <string>
-#include <cassert>
-
 #include <sstream>
+#include <string>
 
 #include "hw/l2_ApplicationLayer.h"
 
 using namespace std;
 
+/** Консольная реализация интерфейса вывода прикладного уровня. */
 class TerminalOutput : public IOutput
 {
 public:
-    virtual void Output(string s) const override final;
+    void Output(string text) const override final;
 };
 
-
-void TerminalOutput::Output(string s) const
+void TerminalOutput::Output(string text) const
 {
-    cout << s << endl;
+    cout << text << endl;
 }
 
-
-int main(int , char **)
+int main()
 {
     TerminalOutput out;
-    Application    app(out);
+    Application app(out);
 
     for (string line; getline(cin, line); )
     {
-        if (line.empty())
+        if (line.find_first_not_of(" \t\r\n") == string::npos)
             break;
 
-        istringstream  iss(line);
+        istringstream input(line);
         vector<string> args;
-    
-        for(string str; iss.good();)
+        while (input >> ws && !input.eof())
         {
-            iss >> str;
-            args.emplace_back(str);
+            string argument;
+            bool is_parsed = static_cast<bool>(input >> quoted(argument));
+            int next = input.peek();
+            if (!is_parsed || (next != char_traits<char>::eof()
+                && !isspace(static_cast<unsigned char>(next))))
+            {
+                out.Output("Ошибка: некорректные кавычки или разделители аргументов");
+                return 1;
+            }
+            args.emplace_back(argument);
         }
-
         if (!app.performCommand(args))
             return 1;
     }
 
-    cout << "Выполнение завершено успешно" << endl;
+    out.Output("Выполнение завершено успешно");
     return 0;
 }

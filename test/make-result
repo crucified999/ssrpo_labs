@@ -1,19 +1,26 @@
-#!/bin/bash
-
-if [ -e lab.data ]
-then
-    rm lab.data
-    rm build/*.gcda
-fi
-
-echo "Start" > test/test-result.out
-
-for file in test/*.test
-do
-    echo "=== ${file} ===" >> test/test-result.out
-    cat ${file} >> test/test-result.out
-    echo "--- Test --->" >> test/test-result.out
-    bin/lab < ${file} >> test/test-result.out
+#!/bin/sh
+# Прогон примеров в отдельном каталоге: пользовательские данные не затрагиваются.
+set -eu
+project_dir="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+fixture_dir="$(mktemp -d "${TMPDIR:-/tmp}/courier-fixtures.XXXXXX")"
+trap 'rm -rf "$fixture_dir"' EXIT HUP INT TERM
+result="$project_dir/test/test-result.out"
+printf 'Start\n' > "$result"
+cd "$fixture_dir"
+for name in 00 01 02; do
+    fixture="$project_dir/test/$name.test"
+    printf '=== test/%s.test ===\n' "$name" >> "$result"
+    cat "$fixture" >> "$result"
+    printf '%s\n' '--- Test --->' >> "$result"
+    if "$project_dir/bin/lab" < "$fixture" >> "$result"; then
+        status=0
+    else
+        status=$?
+    fi
+    expected=0
+    if [ "$name" = 00 ]; then expected=1; fi
+    if [ "$status" -ne "$expected" ]; then
+        printf 'Unexpected exit code %s in %s.test\n' "$status" "$name" >&2
+        exit 1
+    fi
 done
-
-exit 0

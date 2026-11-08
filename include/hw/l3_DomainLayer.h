@@ -1,49 +1,57 @@
-/* 
-MIT License 
-
-Copyright (c) 2019 МГТУ им. Н.Э. Баумана, кафедра ИУ-6, Михаил Фетисов, 
-
-Программа-заготовка для домашнего задания
+/*
+MIT License
+Copyright (c) 2019 МГТУ им. Н.Э. Баумана, кафедра ИУ-6, Михаил Фетисов
 */
 
 #ifndef HW_L3_DOMAIN_LAYER_H
 #define HW_L3_DOMAIN_LAYER_H
 
+#include <cstdint>
+
 #include "hw/l4_InfrastructureLayer.h"
 
-const size_t MAX_NAME_LENGTH    = 50;
-const size_t MIN_YEAR_OF_BIRTH  = 1900;
-const size_t MAX_YEAR_OF_BIRTH  = 2019;
+inline constexpr size_t MAX_COURIER_NAME_LENGTH = 200;
+inline constexpr size_t MAX_PRODUCT_NAME_LENGTH = 200;
+inline constexpr size_t MAX_DELIVERY_ADDRESS_LENGTH = 500;
+inline constexpr uint32_t MIN_ORDER_NUMBER = 1;
+inline constexpr uint32_t MAX_ORDER_NUMBER = UINT32_MAX;
+inline constexpr uint64_t MAX_DELIVERY_COST_KOPECKS = 9999999999ULL;
 
-class Person : public ICollectable
+/** Карточка заказа курьерской службы с проверяемым инвариантом. */
+class Order : public ICollectable
 {
-    std::string _first_name;
-    std::string _last_name;
-    uint16_t    _year_of_birth;
+    uint32_t _order_number;
+    std::string _courier_name;
+    std::string _product_name;
+    std::string _delivery_address;
+    uint64_t _delivery_cost_kopecks;
 
 protected:
     bool invariant() const;
 
 public:
-    Person() = delete;
-    Person(const Person & p) = delete;
+    Order() = delete;
+    Order(const Order &) = delete;
+    Order & operator=(const Order &) = delete;
 
-    Person & operator = (const Person & p) = delete;
+    Order(uint32_t order_number, const std::string & courier_name,
+          const std::string & product_name, const std::string & delivery_address,
+          uint64_t delivery_cost_kopecks);
 
-    Person(const std::string & first_name, const std::string & last_name, uint16_t year_of_birth);
+    uint32_t getOrderNumber() const;
+    const std::string & getCourierName() const;
+    const std::string & getProductName() const;
+    const std::string & getDeliveryAddress() const;
+    uint64_t getDeliveryCostKopecks() const;
 
-    const std::string & getFirstName() const;
-    const std::string & getLastName() const;
-    uint16_t       getYearOfBirth() const;
-
-    virtual bool   write(std::ostream& os) override;
+    bool write(std::ostream & os) override;
 };
 
-
-class ItemCollector: public ACollector
+/** Восстанавливает конкретный заказ из общего формата коллекции. */
+class ItemCollector : public ACollector
 {
 public:
-    virtual std::shared_ptr<ICollectable> read(std::istream& is) override;
+    std::shared_ptr<ICollectable> read(std::istream & is) override;
 };
 
 #endif // HW_L3_DOMAIN_LAYER_H
